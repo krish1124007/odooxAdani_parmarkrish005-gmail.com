@@ -13,10 +13,10 @@ const updateMaintenance = operate("Maintenance", "update");
 const deleteMaintenance = operate("Maintenance", "delete");
 
 
-const addQuipment = operate("Quipment", "create");
-const readQuipment = operate("Quipment", "read");
-const updateQuipment = operate("Quipment", "update");
-const deleteQuipment = operate("Quipment", "delete");
+const addQuipment = operate("Equipment", "create");
+const readQuipment = operate("Equipment", "read");
+const updateQuipment = operate("Equipment", "update");
+const deleteQuipment = operate("Equipment", "delete");
 
 export { 
     createTechnician,

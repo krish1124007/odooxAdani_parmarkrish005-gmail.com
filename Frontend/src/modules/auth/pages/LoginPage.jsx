@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../../context/ThemeContext';
-import authService from '../../../services/authService';
-import '../../../styles/LoginPage.css';
+import { useAuth } from '../../../context/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
   const { colors, isDark, toggleTheme } = useTheme();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -43,35 +43,36 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    
+
     setIsLoading(true);
     setErrors({});
-    
+
     try {
-      // Call backend API - expects { email, password }
-      const response = await authService.login({
-        email: formData.email,
-        password: formData.password
-      });
-      
-      // Backend returns: { success, message, data: { ...user, accessToken } }
+      // Use login from AuthContext instead of direct service call
+      const response = await login(
+        {
+          email: formData.email,
+          password: formData.password
+        },
+        formData.role
+      );
+
       if (response.success) {
-        // Store role in localStorage
-        localStorage.setItem('userRole', formData.role);
-        
         // Route based on role
         if (formData.role === 'admin') {
           navigate('/dashboard');
-        } else {
+        } else if (formData.role === 'user') {
           navigate('/user');
+        } else if (formData.role === 'technician') {
+          navigate('/technician');
         }
       } else {
         throw new Error(response.message || 'Login failed');
       }
     } catch (error) {
       console.error('Login error:', error);
-      setErrors({ 
-        submit: error.message || 'Login failed. Please check your credentials.' 
+      setErrors({
+        submit: error.message || 'Login failed. Please check your credentials.'
       });
     } finally {
       setIsLoading(false);
@@ -79,9 +80,9 @@ const Login = () => {
   };
 
   return (
-    <div className="min-vh-100 d-flex align-items-center justify-content-center position-relative" 
-         style={{ backgroundColor: isDark ? '#0a0e1a' : '#f8f9fa' }}>
-      
+    <div className="min-vh-100 d-flex align-items-center justify-content-center position-relative"
+      style={{ backgroundColor: isDark ? '#0a0e1a' : '#f8f9fa' }}>
+
       <button
         className="btn btn-light position-absolute top-0 end-0 m-3 rounded-circle"
         onClick={toggleTheme}
@@ -92,10 +93,10 @@ const Login = () => {
 
       <div className="card shadow-lg border-0" style={{ width: '100%', maxWidth: '500px', margin: '20px' }}>
         <div className="card-body p-5">
-          
+
           <div className="text-center mb-4">
-            <h1 className="fw-bold odoo-logo" style={{ 
-              fontSize: '3rem', 
+            <h1 className="fw-bold odoo-logo" style={{
+              fontSize: '3rem',
               color: '#714B67',
               fontFamily: 'Inter, sans-serif',
               letterSpacing: '-2px'
@@ -118,6 +119,7 @@ const Login = () => {
               >
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
+                <option value="technician">Technician</option>
               </select>
             </div>
 

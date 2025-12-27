@@ -1,38 +1,141 @@
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import adminService from '../../../services/adminService';
 
 const DashboardPage = () => {
-  const stats = [
-    { 
-      label: 'Total Equipment', 
-      value: '142', 
-      icon: 'bi-gear-fill', 
+  const [stats, setStats] = useState([
+    {
+      label: 'Total Equipment',
+      value: '0',
+      icon: 'bi-gear-fill',
+      bgColor: 'rgba(113, 75, 103, 0.1)',
+      iconColor: '#714B67',
+      change: '+0%',
+      changeType: 'neutral'
+    },
+    {
+      label: 'Active Requests',
+      value: '0',
+      icon: 'bi-wrench',
+      bgColor: 'rgba(255, 193, 7, 0.1)',
+      iconColor: '#FFC107',
+      change: '+0%',
+      changeType: 'neutral'
+    },
+    {
+      label: 'Maintenance Teams',
+      value: '0',
+      icon: 'bi-people-fill',
+      bgColor: 'rgba(1, 126, 132, 0.1)',
+      iconColor: '#017E84',
+      change: '0%',
+      changeType: 'neutral'
+    },
+    {
+      label: 'Technicians',
+      value: '0',
+      icon: 'bi-person-badge-fill',
+      bgColor: 'rgba(40, 167, 69, 0.1)',
+      iconColor: '#28A745',
+      change: '+0%',
+      changeType: 'neutral'
+    },
+  ]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      setIsLoading(true);
+
+      // Fetch all data in parallel
+      const [equipmentRes, maintenanceRes, technicianRes] = await Promise.all([
+        adminService.getEquipment(),
+        adminService.getMaintenanceTeams(),
+        adminService.getTechnicians()
+      ]);
+
+      // Update stats with real data
+      setStats([
+        {
+          label: 'Total Equipment',
+          value: equipmentRes.data?.length?.toString() || '0',
+          icon: 'bi-gear-fill',
+          bgColor: 'rgba(113, 75, 103, 0.1)',
+          iconColor: '#714B67',
+          change: '+12%',
+          changeType: 'positive'
+        },
+        {
+          label: 'Active Requests',
+          value: '0',
+          icon: 'bi-wrench',
+          bgColor: 'rgba(255, 193, 7, 0.1)',
+          iconColor: '#FFC107',
+          change: '+5%',
+          changeType: 'positive'
+        },
+        {
+          label: 'Maintenance Teams',
+          value: maintenanceRes.data?.length?.toString() || '0',
+          icon: 'bi-people-fill',
+          bgColor: 'rgba(1, 126, 132, 0.1)',
+          iconColor: '#017E84',
+          change: '0%',
+          changeType: 'neutral'
+        },
+        {
+          label: 'Technicians',
+          value: technicianRes.data?.length?.toString() || '0',
+          icon: 'bi-person-badge-fill',
+          bgColor: 'rgba(40, 167, 69, 0.1)',
+          iconColor: '#28A745',
+          change: '+8%',
+          changeType: 'positive'
+        },
+      ]);
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const oldStats = [
+    {
+      label: 'Total Equipment',
+      value: '142',
+      icon: 'bi-gear-fill',
       bgColor: 'rgba(113, 75, 103, 0.1)',
       iconColor: '#714B67',
       change: '+12%',
       changeType: 'positive'
     },
-    { 
-      label: 'Active Requests', 
-      value: '23', 
-      icon: 'bi-wrench', 
+    {
+      label: 'Active Requests',
+      value: '23',
+      icon: 'bi-wrench',
       bgColor: 'rgba(255, 193, 7, 0.1)',
       iconColor: '#FFC107',
       change: '+5%',
       changeType: 'positive'
     },
-    { 
-      label: 'Completed This Month', 
-      value: '89', 
-      icon: 'bi-check-circle-fill', 
+    {
+      label: 'Completed This Month',
+      value: '89',
+      icon: 'bi-check-circle-fill',
       bgColor: 'rgba(40, 167, 69, 0.1)',
       iconColor: '#28A745',
       change: '+18%',
       changeType: 'positive'
     },
-    { 
-      label: 'Teams', 
-      value: '8', 
-      icon: 'bi-people-fill', 
+    {
+      label: 'Teams',
+      value: '8',
+      icon: 'bi-people-fill',
       bgColor: 'rgba(1, 126, 132, 0.1)',
       iconColor: '#017E84',
       change: '0%',
@@ -50,28 +153,28 @@ const DashboardPage = () => {
   ]
 
   const recentRequests = [
-    { 
-      id: 'REQ-1001', 
-      equipment: 'CNC Machine #5', 
-      type: 'Corrective', 
+    {
+      id: 'REQ-1001',
+      equipment: 'CNC Machine #5',
+      type: 'Corrective',
       status: 'In Progress',
       assignee: 'John Doe',
       priority: 'High',
       time: '2 hours ago'
     },
-    { 
-      id: 'REQ-1002', 
-      equipment: 'Forklift #12', 
-      type: 'Preventive', 
+    {
+      id: 'REQ-1002',
+      equipment: 'Forklift #12',
+      type: 'Preventive',
       status: 'New',
       assignee: 'Sarah Smith',
       priority: 'Medium',
       time: '4 hours ago'
     },
-    { 
-      id: 'REQ-1003', 
-      equipment: 'HVAC Unit #3', 
-      type: 'Corrective', 
+    {
+      id: 'REQ-1003',
+      equipment: 'HVAC Unit #3',
+      type: 'Corrective',
       status: 'Completed',
       assignee: 'Mike Johnson',
       priority: 'Low',
@@ -96,6 +199,19 @@ const DashboardPage = () => {
       'Low': 'badge-success'
     }
     return priorityMap[priority] || 'badge-secondary'
+  }
+
+  if (isLoading) {
+    return (
+      <div className="dashboard-container">
+        <div className="text-center py-5">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="mt-3 text-muted">Loading dashboard...</p>
+        </div>
+      </div>
+    );
   }
 
   return (

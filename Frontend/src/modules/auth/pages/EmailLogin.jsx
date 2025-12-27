@@ -1,12 +1,13 @@
 ﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../../context/ThemeContext';
+import authService from '../../../services/authService';
 import '../../../styles/EmailLogin.css';
 
 const EmailLogin = () => {
   const navigate = useNavigate();
   const { colors, isDark, toggleTheme } = useTheme();
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '', role: 'user' });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,8 +29,8 @@ const EmailLogin = () => {
     }
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
     }
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password';
@@ -43,30 +44,27 @@ const EmailLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    
+
     setIsLoading(true);
     setErrors({});
-    
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      const newUser = {
-        id: Date.now(),
+      const response = await authService.signup({
         name: formData.name,
         email: formData.email,
-        role: formData.role
-      };
-      localStorage.setItem('authToken', 'mock-signup-token-' + Date.now());
-      localStorage.setItem('userData', JSON.stringify(newUser));
-      localStorage.setItem('userRole', formData.role);
-      
-      // Route based on role
-      if (formData.role === 'admin') {
-        navigate('/dashboard');
+        password: formData.password,
+        phone_number: ''
+      }, formData.role || 'user');
+
+      if (response.success) {
+        alert('Account created successfully! Please login.');
+        navigate('/login');
       } else {
-        navigate('/user');
+        throw new Error(response.message || 'Signup failed');
       }
     } catch (error) {
-      setErrors({ submit: error.message || 'Sign up failed.' });
+      console.error('Signup error:', error);
+      setErrors({ submit: error.message || 'Sign up failed. Please try again.' });
     } finally {
       setIsLoading(false);
     }
@@ -74,31 +72,32 @@ const EmailLogin = () => {
 
   return (
     <div className="vh-100 d-flex align-items-center justify-content-center position-relative overflow-hidden" style={{ backgroundColor: isDark ? '#0a0e1a' : '#f8f9fa' }}>
-      
+
       <button className="btn btn-light position-absolute top-0 end-0 m-3 rounded-circle" onClick={toggleTheme} style={{ width: '45px', height: '45px', zIndex: 10 }}>
         <i className={`bi bi-${isDark ? 'sun' : 'moon'}-fill`}></i>
       </button>
 
       <div className="card shadow-lg border-0" style={{ width: '100%', maxWidth: '480px', margin: '20px', maxHeight: 'calc(100vh - 40px)' }}>
         <div className="card-body p-4" style={{ overflowY: 'auto' }}>
-          
+
           <div className="text-center mb-4">
             <h1 className="fw-bold odoo-logo" style={{ fontSize: '2.5rem', color: '#714B67', fontFamily: 'Inter, sans-serif', letterSpacing: '-2px', marginBottom: '1rem' }}>GearGuard</h1>
           </div>
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label htmlFor="role" className="form-label fw-semibold mb-1">Select Role</label>
+              <label htmlFor="role" className="form-label fw-semibold mb-1">Sign Up As</label>
               <select
                 className="form-select"
                 id="role"
                 name="role"
-                value={formData.role}
+                value={formData.role || 'user'}
                 onChange={handleInputChange}
                 disabled={isLoading}
                 style={{ padding: '0.6rem', fontSize: '0.95rem' }}
               >
                 <option value="user">User</option>
+                <option value="technician">Technician</option>
                 <option value="admin">Admin</option>
               </select>
             </div>
@@ -136,6 +135,13 @@ const EmailLogin = () => {
             <button type="submit" className="btn btn-lg w-100 text-white fw-semibold mb-3" disabled={isLoading} style={{ backgroundColor: '#8e7a8a', border: 'none', padding: '0.7rem' }}>
               {isLoading ? (<><span className="spinner-border spinner-border-sm me-2"></span>Creating account...</>) : 'SIGN UP'}
             </button>
+
+            <div className="text-center">
+              <span className="text-muted">Already have an account? </span>
+              <button type="button" className="btn btn-link text-decoration-none p-0" onClick={() => navigate('/login')} style={{ color: '#017E84' }}>
+                Sign In
+              </button>
+            </div>
           </form>
         </div>
       </div>
