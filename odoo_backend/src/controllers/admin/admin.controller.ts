@@ -12,6 +12,12 @@ const readMaintenance = operate("Maintenance", "read");
 const updateMaintenance = operate("Maintenance", "update");
 const deleteMaintenance = operate("Maintenance", "delete");
 
+
+const addQuipment = operate("Quipment", "create");
+const readQuipment = operate("Quipment", "read");
+const updateQuipment = operate("Quipment", "update");
+const deleteQuipment = operate("Quipment", "delete");
+
 export { 
     createTechnician,
     readTechnician,
@@ -21,4 +27,8 @@ export {
     readMaintenance,
     updateMaintenance,
     deleteMaintenance,
+    addQuipment,
+    readQuipment,
+    updateQuipment,
+    deleteQuipment,
 };
