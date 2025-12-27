@@ -2,8 +2,10 @@ import { Document, Types } from "mongoose";
 
 
 export interface ITechnician extends Document {
-    name:string,
-    password:string,
-    email:string,
-    team:Types.ObjectId   
+    name: string;
+    password: string;
+    email: string;
+    team: Types.ObjectId;
+    comparePassword(password: string): Promise<boolean>;
+    generateToken(): string;
 }

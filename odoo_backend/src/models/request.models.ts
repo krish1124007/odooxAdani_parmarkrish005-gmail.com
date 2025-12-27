@@ -75,6 +75,10 @@ const MaintenanceRequestSchema = new Schema<IMaintenanceRequest>(
             type: Boolean,
             default: true,
         },
+        assignedByTechnician: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         timestamps: true,

@@ -23,6 +23,7 @@ export interface IMaintenanceRequest extends Document {
 
     company: Types.ObjectId; // multi-company ready
     isActive: boolean;
+    assignedByTechnician: boolean;
 
     createdAt: Date;
     updatedAt: Date;
