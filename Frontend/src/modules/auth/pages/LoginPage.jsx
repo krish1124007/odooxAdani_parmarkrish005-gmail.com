@@ -1,70 +1,167 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../../../context/ThemeContext';
+import '../../../styles/LoginPage.css';
 
-const LoginPage = () => {
-  const navigate = useNavigate()
+const Login = () => {
+  const navigate = useNavigate();
+  const { colors, isDark, toggleTheme } = useTheme();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
-  })
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // TODO: Implement authentication
-    navigate('/')
-  }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.email) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    
+    setIsLoading(true);
+    setErrors({});
+    
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      if (formData.email === 'admin@admin.com' && formData.password === 'admin123') {
+        const mockUserData = {
+          id: 1,
+          email: formData.email,
+          name: 'Admin User',
+          role: 'admin'
+        };
+        localStorage.setItem('authToken', 'mock-jwt-token-' + Date.now());
+        localStorage.setItem('userData', JSON.stringify(mockUserData));
+        navigate('/dashboard');
+      } else {
+        throw new Error('Invalid email or password');
+      }
+    } catch (error) {
+      setErrors({ submit: error.message || 'Login failed. Please try again.' });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light">
-      <div className="card shadow" style={{ width: '400px' }}>
+    <div className="min-vh-100 d-flex align-items-center justify-content-center position-relative" 
+         style={{ backgroundColor: isDark ? '#0a0e1a' : '#f8f9fa' }}>
+      
+      <button
+        className="btn btn-light position-absolute top-0 end-0 m-3 rounded-circle"
+        onClick={toggleTheme}
+        style={{ width: '45px', height: '45px' }}
+      >
+        <i className={`bi bi-${isDark ? 'sun' : 'moon'}-fill`}></i>
+      </button>
+
+      <div className="card shadow-lg border-0" style={{ width: '100%', maxWidth: '500px', margin: '20px' }}>
         <div className="card-body p-5">
+          
           <div className="text-center mb-4">
-            <h1 className="h3 mb-2 text-odoo-primary">🛠️ GearGuard</h1>
-            <p className="text-muted">Sign in to your account</p>
+            <h1 className="fw-bold odoo-logo" style={{ 
+              fontSize: '3rem', 
+              color: '#714B67',
+              fontFamily: 'Inter, sans-serif',
+              letterSpacing: '-2px'
+            }}>
+              GearGuard
+            </h1>
           </div>
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label className="form-label">Email address</label>
+              <label htmlFor="email" className="form-label fw-semibold">Email</label>
               <input
                 type="email"
-                className="form-control"
+                className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                id="email"
+                name="email"
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
+                onChange={handleInputChange}
+                placeholder="Enter your email"
+                disabled={isLoading}
+                style={{ padding: '0.75rem', fontSize: '1rem' }}
               />
+              {errors.email && <div className="invalid-feedback">{errors.email}</div>}
             </div>
 
             <div className="mb-3">
-              <label className="form-label">Password</label>
-              <input
-                type="password"
-                className="form-control"
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                required
-              />
+              <label htmlFor="password" className="form-label fw-semibold">Password</label>
+              <div className="input-group">
+                <input
+                  type="password"
+                  className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  placeholder="Enter your password"
+                  disabled={isLoading}
+                  style={{ padding: '0.75rem', fontSize: '1rem' }}
+                />
+                {errors.password && <div className="invalid-feedback d-block">{errors.password}</div>}
+              </div>
             </div>
 
-            <div className="mb-3 form-check">
-              <input type="checkbox" className="form-check-input" id="remember" />
-              <label className="form-check-label" htmlFor="remember">
-                Remember me
-              </label>
-            </div>
+            {errors.submit && <div className="alert alert-danger py-2" role="alert">{errors.submit}</div>}
 
-            <button type="submit" className="btn btn-odoo-primary w-100 mb-3">
-              Sign In
+            <button
+              type="submit"
+              className="btn btn-lg w-100 text-white fw-semibold mb-3"
+              disabled={isLoading}
+              style={{ backgroundColor: '#8e7a8a', border: 'none', padding: '0.75rem' }}
+            >
+              {isLoading ? (<><span className="spinner-border spinner-border-sm me-2"></span>Signing in...</>) : 'SIGN IN'}
             </button>
 
             <div className="text-center">
-              <a href="#" className="text-decoration-none text-odoo-primary">Forgot password?</a>
+              <button type="button" className="btn btn-link text-decoration-none p-0" style={{ color: '#017E84' }}>
+                Forget Password ?
+              </button>
+              <span className="mx-2">|</span>
+              <button type="button" className="btn btn-link text-decoration-none p-0" onClick={() => navigate('/signup')} style={{ color: '#017E84' }}>
+                Sign Up
+              </button>
             </div>
           </form>
+
+          <div className="mt-4 p-3 bg-light rounded">
+            <small className="text-muted">
+              <strong>Demo Credentials:</strong><br />
+              Email: admin@admin.com<br />
+              Password: admin123
+            </small>
+          </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default Login;
