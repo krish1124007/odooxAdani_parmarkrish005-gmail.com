@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../../context/ThemeContext';
-import authService from '../../../services/authService';
 import '../../../styles/LoginPage.css';
 
 const Login = () => {
@@ -47,24 +46,23 @@ const Login = () => {
     setErrors({});
     
     try {
-      // Call backend API - expects { email, password }
-      const response = await authService.login({
-        email: formData.email,
-        password: formData.password
-      });
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Backend returns: { success, message, data: { ...user, accessToken } }
-      if (response.success) {
-        // Token and userData are already stored in authService
-        navigate('/');
+      if (formData.email === 'admin@admin.com' && formData.password === 'admin123') {
+        const mockUserData = {
+          id: 1,
+          email: formData.email,
+          name: 'Admin User',
+          role: 'admin'
+        };
+        localStorage.setItem('authToken', 'mock-jwt-token-' + Date.now());
+        localStorage.setItem('userData', JSON.stringify(mockUserData));
+        navigate('/dashboard');
       } else {
-        throw new Error(response.message || 'Login failed');
+        throw new Error('Invalid email or password');
       }
     } catch (error) {
-      console.error('Login error:', error);
-      setErrors({ 
-        submit: error.message || 'Login failed. Please check your credentials.' 
-      });
+      setErrors({ submit: error.message || 'Login failed. Please try again.' });
     } finally {
       setIsLoading(false);
     }
