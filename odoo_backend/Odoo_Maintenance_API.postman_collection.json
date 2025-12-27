@@ -1,0 +1,561 @@
+{
+    "info": {
+        "_postman_id": "odoo-maintenance-api-2025",
+        "name": "Odoo Maintenance System API",
+        "description": "Complete API collection for Odoo Maintenance System with User and Admin endpoints",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "User Authentication",
+            "item": [
+                {
+                    "name": "Create User Account",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"SecurePassword123\",\n  \"phone_number\": \"+1234567890\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/user/create-account",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "user",
+                                "create-account"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "User Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData.data && jsonData.data.accessToken) {",
+                                    "    pm.environment.set(\"user_token\", jsonData.data.accessToken);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"SecurePassword123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/user/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "user",
+                                "login"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "User APIs",
+            "item": [
+                {
+                    "name": "Get Equipment Suggestions",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{user_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"pump\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/user/suggestion",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "user",
+                                "suggestion"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Maintenance Request",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{user_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"subject\": \"Water Pump Repair\",\n  \"type\": \"corrective\",\n  \"equipment\": \"{{equipment_id}}\",\n  \"maintenanceTeam\": \"{{team_id}}\",\n  \"assignedTechnician\": \"{{technician_id}}\",\n  \"requestedBy\": \"65abc123def456\",\n  \"scheduledDate\": \"2025-12-30T10:00:00Z\",\n  \"startedAt\": \"2025-12-30T10:30:00Z\",\n  \"completedAt\": \"2025-12-30T14:00:00Z\",\n  \"durationInHours\": 3.5,\n  \"worksheet\": \"Replaced damaged impeller and checked seals\",\n  \"company\": \"Adani Power Ltd\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/user/create-request",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "user",
+                                "create-request"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Read Maintenance Request",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{user_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/user/read-request",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "user",
+                                "read-request"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Admin Authentication",
+            "item": [
+                {
+                    "name": "Create Admin Account",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"admin@odoo.com\",\n  \"password\": \"AdminSecure123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/admin/create-account",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "admin",
+                                "create-account"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Admin Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData.data && jsonData.data.token) {",
+                                    "    pm.environment.set(\"admin_token\", jsonData.data.token);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"admin@odoo.com\",\n  \"password\": \"AdminSecure123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/admin/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "admin",
+                                "login"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Admin - Technician Management",
+            "item": [
+                {
+                    "name": "Create Technician",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData.data && jsonData.data._id) {",
+                                    "    pm.environment.set(\"technician_id\", jsonData.data._id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Mike Johnson\",\n  \"email\": \"mike.johnson@odoo.com\",\n  \"password\": \"TechPassword123\",\n  \"team\": \"{{team_id}}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/admin/createTechnician",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "admin",
+                                "createTechnician"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Read All Technicians",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/admin/readTechnician",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "admin",
+                                "readTechnician"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Technician",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Michael Johnson\",\n  \"email\": \"michael.johnson@odoo.com\",\n  \"team\": \"{{team_id}}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/admin/updateTechnician/{{technician_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "admin",
+                                "updateTechnician",
+                                "{{technician_id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Technician",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/admin/deleteTechnician/{{technician_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "admin",
+                                "deleteTechnician",
+                                "{{technician_id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Admin - Maintenance Team Management",
+            "item": [
+                {
+                    "name": "Create Maintenance Team",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData.data && jsonData.data._id) {",
+                                    "    pm.environment.set(\"team_id\", jsonData.data._id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Electrical Maintenance Team\",\n  \"code\": \"EMT-001\",\n  \"description\": \"Handles all electrical equipment maintenance\",\n  \"isActive\": true\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/admin/createMaintenance",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "admin",
+                                "createMaintenance"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Read All Maintenance Teams",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/admin/readMaintenance",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "admin",
+                                "readMaintenance"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Maintenance Team",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Advanced Electrical Team\",\n  \"code\": \"AET-001\",\n  \"description\": \"Updated description\",\n  \"isActive\": true\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/admin/updateMaintenance/{{team_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "admin",
+                                "updateMaintenance",
+                                "{{team_id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Maintenance Team",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/admin/deleteMaintenance/{{team_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "admin",
+                                "deleteMaintenance",
+                                "{{team_id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:5000",
+            "type": "string"
+        }
+    ]
+}
