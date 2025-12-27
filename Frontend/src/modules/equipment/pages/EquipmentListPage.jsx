@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 const EquipmentListPage = () => {
-  const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
+  const [viewMode, setViewMode] = useState('list') // 'grid' or 'list'
 
   const equipmentData = [
     {
@@ -132,19 +132,20 @@ const EquipmentListPage = () => {
 
         <div className="view-toggle">
           <button 
-            className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
-            onClick={() => setViewMode('grid')}
-            title="Grid View"
-          >
-            <i className="bi bi-grid-3x2"></i>
-          </button>
-          <button 
             className={`view-toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
             onClick={() => setViewMode('list')}
             title="List View"
           >
             <i className="bi bi-list-ul"></i>
           </button>
+          <button 
+            className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
+            onClick={() => setViewMode('grid')}
+            title="Grid View"
+          >
+            <i className="bi bi-grid-3x2"></i>
+          </button>
+          
         </div>
       </div>
 
