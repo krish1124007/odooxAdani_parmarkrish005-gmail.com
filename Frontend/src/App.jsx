@@ -9,6 +9,9 @@ import RequestListPage from './modules/requests/pages/RequestListPage'
 import RequestKanbanPage from './modules/requests/pages/RequestKanbanPage'
 import TeamsListPage from './modules/teams/pages/TeamsListPage'
 import MaintenanceCalendarPage from './modules/calendar/pages/MaintenanceCalendarPage'
+import CreateTicket from './modules/tickets/pages/CreateTicket'
+import ShowTickets from './modules/tickets/pages/ShowTickets'
+import UserHomePage from './modules/tickets/pages/UserHomePage'
 
 function App() {
   return (
@@ -19,6 +22,7 @@ function App() {
           <Route path="/signup" element={<EmailLogin />} />
           <Route path="/" element={<Navigate to="/login" replace />} />
           
+          {/* Admin Routes */}
           <Route path="/dashboard" element={<AppLayout />}>
             <Route index element={<DashboardPage />} />
             <Route path="equipment" element={<EquipmentListPage />} />
@@ -26,6 +30,13 @@ function App() {
             <Route path="requests/kanban" element={<RequestKanbanPage />} />
             <Route path="teams" element={<TeamsListPage />} />
             <Route path="calendar" element={<MaintenanceCalendarPage />} />
+          </Route>
+
+          {/* User Routes */}
+          <Route path="/user">
+            <Route index element={<UserHomePage />} />
+            <Route path="tickets" element={<ShowTickets />} />
+            <Route path="create-ticket" element={<CreateTicket />} />
           </Route>
         </Routes>
       </Router>

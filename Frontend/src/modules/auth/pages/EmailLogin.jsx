@@ -6,7 +6,7 @@ import '../../../styles/EmailLogin.css';
 const EmailLogin = () => {
   const navigate = useNavigate();
   const { colors, isDark, toggleTheme } = useTheme();
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '', role: 'user' });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -53,11 +53,18 @@ const EmailLogin = () => {
         id: Date.now(),
         name: formData.name,
         email: formData.email,
-        role: 'user'
+        role: formData.role
       };
       localStorage.setItem('authToken', 'mock-signup-token-' + Date.now());
       localStorage.setItem('userData', JSON.stringify(newUser));
-      navigate('/dashboard');
+      localStorage.setItem('userRole', formData.role);
+      
+      // Route based on role
+      if (formData.role === 'admin') {
+        navigate('/dashboard');
+      } else {
+        navigate('/user');
+      }
     } catch (error) {
       setErrors({ submit: error.message || 'Sign up failed.' });
     } finally {
@@ -80,6 +87,22 @@ const EmailLogin = () => {
           </div>
 
           <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="role" className="form-label fw-semibold mb-1">Select Role</label>
+              <select
+                className="form-select"
+                id="role"
+                name="role"
+                value={formData.role}
+                onChange={handleInputChange}
+                disabled={isLoading}
+                style={{ padding: '0.6rem', fontSize: '0.95rem' }}
+              >
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+
             <div className="mb-3">
               <label htmlFor="name" className="form-label fw-semibold mb-1">Name</label>
               <input type="text" className={`form-control ${errors.name ? 'is-invalid' : ''}`} id="name" name="name" value={formData.name} onChange={handleInputChange} placeholder="John Doe" disabled={isLoading} style={{ padding: '0.6rem', fontSize: '0.95rem' }} />
