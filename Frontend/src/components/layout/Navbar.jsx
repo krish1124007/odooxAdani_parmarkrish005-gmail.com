@@ -6,11 +6,11 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const menuItems = [
-    { path: '/', label: 'Apps' },
-    { path: '/equipment', label: 'Industries' },
-    { path: '/community', label: 'Community' },
-    { path: '/pricing', label: 'Pricing' },
-    { path: '/help', label: 'Help' },
+    { path: '/', label: 'Dashboard' },
+    { path: '/calendar', label: 'Maintenance Calendar' },
+    { path: '/equipment', label: 'Equipment' },
+    { path: '/reports', label: 'Reporting' },
+    { path: '/teams', label: 'Teams' },
   ]
 
   return (
