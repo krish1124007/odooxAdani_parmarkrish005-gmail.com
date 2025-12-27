@@ -7,6 +7,7 @@ import { ApiError } from "../../utils/ApiError.js";
 
 
 
+
 const createAdmin = asyncHandler(async (req: Request, res: Response) => {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -37,3 +38,5 @@ export {
     createAdmin,
     loginAdmin
 }
+
+

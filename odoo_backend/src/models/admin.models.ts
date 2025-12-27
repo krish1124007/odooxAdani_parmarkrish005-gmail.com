@@ -6,17 +6,16 @@ import bcrypt from "bcrypt"
 type AdminDocument = IAdmin & mongoose.Document
 
 const AdminSchema = new mongoose.Schema<AdminDocument>({
-    email:{
-        type:String,
-        required:true,
-        unique:true
+    email: {
+        type: String,
+        required: true,
+        unique: true
     },
-    password:{
-        type:String,
-        required:true
+    password: {
+        type: String,
+        required: true
     }
 })
-
 
 AdminSchema.pre("save", async function () {
     if (this.isModified("password")) {
@@ -37,4 +36,4 @@ AdminSchema.methods.generateToken = function () {
     )
 }
 
-export const AdminModel = mongoose.model<AdminDocument>("Admin",AdminSchema)
+export const AdminModel = mongoose.model<AdminDocument>("Admin", AdminSchema)
