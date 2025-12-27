@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Document, Types } from "mongoose";
 import type { RequestType, RequestStatus } from "../types/request.types.js";
 
@@ -28,3 +29,5 @@ export interface IMaintenanceRequest extends Document {
     createdAt: Date;
     updatedAt: Date;
 }
+=======
+>>>>>>> 19aa003f32d52a841ca0d273417bf9a9c9fcb1b1
