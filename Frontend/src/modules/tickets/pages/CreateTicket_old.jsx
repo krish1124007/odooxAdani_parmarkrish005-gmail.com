@@ -17,7 +17,7 @@ const CreateTicket = () => {
     maintenanceType: '',
     description: ''
   })
-
+  
   const [showSuggestion, setShowSuggestion] = useState(false)
   const [suggestions, setSuggestions] = useState([])
   const [useSuggestion, setUseSuggestion] = useState(false)
@@ -64,7 +64,7 @@ const CreateTicket = () => {
       }
 
       const data = await response.json()
-      setSuggestions(data.data)
+      setSuggestions(data)
       setShowSuggestion(true)
     } catch (error) {
       console.error('Error fetching suggestions:', error)
@@ -92,6 +92,8 @@ const CreateTicket = () => {
     }
   }
 
+
+
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
@@ -112,7 +114,7 @@ const CreateTicket = () => {
     if (!formData.company) newErrors.company = 'Company is required'
     if (!formData.maintenanceType) newErrors.maintenanceType = 'Maintenance Type is required'
     if (!formData.description.trim()) newErrors.description = 'Description is required'
-
+    
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -501,7 +503,172 @@ const CreateTicket = () => {
               {errors.category && <small style={{ color: odooColors.error, fontFamily: 'Inter, sans-serif' }}>{errors.category}</small>}
             </div>
 
-            {/* Row 5: Team and Technician */}
+              <div>
+                <label style={{
+                  display: 'block',
+                  fontSize: '0.95rem',
+                  fontWeight: '600',
+                  color: isDark ? '#f1f5f9' : '#1e293b',
+                  fontFamily: 'Inter, sans-serif',
+                  marginBottom: '0.5rem'
+                }}>
+                  Serial No <span style={{ color: odooColors.error }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="serialNo"
+                  value={formData.serialNo}
+                  onChange={handleInputChange}
+                  placeholder="Enter serial number"
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    border: `1px solid ${errors.serialNo ? odooColors.error : isDark ? odooColors.neutralGray + '30' : '#e2e8f0'}`,
+                    borderRadius: '8px',
+                    backgroundColor: isDark ? '#0a0e1a' : '#ffffff',
+                    color: isDark ? '#f1f5f9' : '#1e293b',
+                    fontSize: '1rem',
+                    fontFamily: 'Inter, sans-serif',
+                    outline: 'none',
+                    transition: 'border-color 0.3s ease'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = odooColors.secondaryTeal
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = errors.serialNo ? odooColors.error : isDark ? odooColors.neutralGray + '30' : '#e2e8f0'
+                  }}
+                />
+                {errors.serialNo && <small style={{ color: odooColors.error, fontFamily: 'Inter, sans-serif' }}>{errors.serialNo}</small>}
+              </div>
+            </div>
+
+            {/* Row 2: Name and Email */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+              <div>
+                <label style={{
+                  display: 'block',
+                  fontSize: '0.95rem',
+                  fontWeight: '600',
+                  color: isDark ? '#f1f5f9' : '#1e293b',
+                  fontFamily: 'Inter, sans-serif',
+                  marginBottom: '0.5rem'
+                }}>
+                  Name <span style={{ color: odooColors.error }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="Enter your full name"
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    border: `1px solid ${errors.name ? odooColors.error : isDark ? odooColors.neutralGray + '30' : '#e2e8f0'}`,
+                    borderRadius: '8px',
+                    backgroundColor: isDark ? '#0a0e1a' : '#ffffff',
+                    color: isDark ? '#f1f5f9' : '#1e293b',
+                    fontSize: '1rem',
+                    fontFamily: 'Inter, sans-serif',
+                    outline: 'none',
+                    transition: 'border-color 0.3s ease'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = odooColors.secondaryTeal
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = errors.name ? odooColors.error : isDark ? odooColors.neutralGray + '30' : '#e2e8f0'
+                  }}
+                />
+                {errors.name && <small style={{ color: odooColors.error, fontFamily: 'Inter, sans-serif' }}>{errors.name}</small>}
+              </div>
+
+              <div>
+                <label style={{
+                  display: 'block',
+                  fontSize: '0.95rem',
+                  fontWeight: '600',
+                  color: isDark ? '#f1f5f9' : '#1e293b',
+                  fontFamily: 'Inter, sans-serif',
+                  marginBottom: '0.5rem'
+                }}>
+                  Email <span style={{ color: odooColors.error }}>*</span>
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="your.email@company.com"
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    border: `1px solid ${errors.email ? odooColors.error : isDark ? odooColors.neutralGray + '30' : '#e2e8f0'}`,
+                    borderRadius: '8px',
+                    backgroundColor: isDark ? '#0a0e1a' : '#ffffff',
+                    color: isDark ? '#f1f5f9' : '#1e293b',
+                    fontSize: '1rem',
+                    fontFamily: 'Inter, sans-serif',
+                    outline: 'none',
+                    transition: 'border-color 0.3s ease'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = odooColors.secondaryTeal
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = errors.email ? odooColors.error : isDark ? odooColors.neutralGray + '30' : '#e2e8f0'
+                  }}
+                />
+                {errors.email && <small style={{ color: odooColors.error, fontFamily: 'Inter, sans-serif' }}>{errors.email}</small>}
+              </div>
+            </div>
+
+            {/* Row 3: Category */}
+            <div style={{ marginBottom: '2rem' }}>
+              <label style={{
+                display: 'block',
+                fontSize: '0.95rem',
+                fontWeight: '600',
+                color: isDark ? '#f1f5f9' : '#1e293b',
+                fontFamily: 'Inter, sans-serif',
+                marginBottom: '0.5rem'
+              }}>
+                Category <span style={{ color: odooColors.error }}>*</span>
+              </label>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleInputChange}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: `1px solid ${errors.category ? odooColors.error : isDark ? odooColors.neutralGray + '30' : '#e2e8f0'}`,
+                  borderRadius: '8px',
+                  backgroundColor: isDark ? '#0a0e1a' : '#ffffff',
+                  color: isDark ? '#f1f5f9' : '#1e293b',
+                  fontSize: '1rem',
+                  fontFamily: 'Inter, sans-serif',
+                  outline: 'none',
+                  cursor: 'pointer'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = odooColors.secondaryTeal
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = errors.category ? odooColors.error : isDark ? odooColors.neutralGray + '30' : '#e2e8f0'
+                }}
+              >
+                <option value="">Select Category</option>
+                <option value="Maintenance">Maintenance</option>
+                <option value="Repair">Repair</option>
+                <option value="Installation">Installation</option>
+                <option value="Support">Support</option>
+              </select>
+              {errors.category && <small style={{ color: odooColors.error, fontFamily: 'Inter, sans-serif' }}>{errors.category}</small>}
+            </div>
+
+            {/* Row 3: Team and Technician */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
               <div>
                 <label style={{
@@ -588,7 +755,7 @@ const CreateTicket = () => {
               </div>
             </div>
 
-            {/* Row 6: Company and Maintenance Type */}
+            {/* Row 4: Company and Maintenance Type */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
               <div>
                 <label style={{
@@ -674,7 +841,7 @@ const CreateTicket = () => {
               </div>
             </div>
 
-            {/* Row 7: Description */}
+            {/* Description */}
             <div style={{ marginBottom: '2rem' }}>
               <label style={{
                 display: 'block',
@@ -715,7 +882,7 @@ const CreateTicket = () => {
               {errors.description && <small style={{ color: odooColors.error, fontFamily: 'Inter, sans-serif' }}>{errors.description}</small>}
             </div>
 
-            {/* Buttons: Submit and Cancel */}
+            {/* Buttons */}
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-start' }}>
               <button
                 type="submit"

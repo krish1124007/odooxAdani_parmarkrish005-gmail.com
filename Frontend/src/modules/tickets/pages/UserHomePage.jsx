@@ -154,8 +154,7 @@ const UserHomePage = () => {
               boxShadow: isDark ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.1)',
               border: isDark ? `1px solid ${odooColors.neutralGray}20` : 'none',
               cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              borderTop: `4px solid ${odooColors.secondaryTeal}`
+              transition: 'all 0.3s ease'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-5px)'
@@ -180,7 +179,7 @@ const UserHomePage = () => {
               fontFamily: 'Inter, sans-serif',
               marginBottom: '0.5rem'
             }}>
-              Submit a Ticket
+              Submit a Request
             </h3>
             <p style={{
               fontSize: '1rem',
@@ -188,7 +187,7 @@ const UserHomePage = () => {
               fontFamily: 'Inter, sans-serif',
               lineHeight: '1.5'
             }}>
-              Describe your issue by filling out our support ticket form and we'll get back to you shortly.
+              Describe your issue by filling out our support request form and we'll get back to you shortly.
             </p>
           </div>
 
@@ -202,16 +201,13 @@ const UserHomePage = () => {
               boxShadow: isDark ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.1)',
               border: isDark ? `1px solid ${odooColors.neutralGray}20` : 'none',
               cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              borderTop: `4px solid ${odooColors.primaryPurple}`
+              transition: 'all 0.3s ease'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-5px)'
-              e.currentTarget.style.boxShadow = isDark ? 'none' : '0 8px 16px rgba(0, 0, 0, 0.15)'
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'translateY(0)'
-              e.currentTarget.style.boxShadow = isDark ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.1)'
             }}
           >
             <div style={{
@@ -228,7 +224,7 @@ const UserHomePage = () => {
               fontFamily: 'Inter, sans-serif',
               marginBottom: '0.5rem'
             }}>
-              View All Tickets
+              View All Requests
             </h3>
             <p style={{
               fontSize: '1rem',
@@ -236,56 +232,11 @@ const UserHomePage = () => {
               fontFamily: 'Inter, sans-serif',
               lineHeight: '1.5'
             }}>
-              Track all your ticket's progress and your interaction with support team.
+              Track all your request's progress and your interaction with support team.
             </p>
           </div>
 
-          {/* Knowledge Base Card */}
-          <div
-            style={{
-              backgroundColor: isDark ? odooColors.cardBg : odooColors.white,
-              borderRadius: '12px',
-              padding: '2rem',
-              boxShadow: isDark ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.1)',
-              border: isDark ? `1px solid ${odooColors.neutralGray}20` : 'none',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              borderTop: `4px solid ${odooColors.readyGreen}`
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-5px)'
-              e.currentTarget.style.boxShadow = isDark ? 'none' : '0 8px 16px rgba(0, 0, 0, 0.15)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)'
-              e.currentTarget.style.boxShadow = isDark ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.1)'
-            }}
-          >
-            <div style={{
-              fontSize: '3rem',
-              color: odooColors.readyGreen,
-              marginBottom: '1rem'
-            }}>
-              <i className="bi bi-book"></i>
-            </div>
-            <h3 style={{
-              fontSize: '1.4rem',
-              fontWeight: '700',
-              color: isDark ? '#f1f5f9' : '#1e293b',
-              fontFamily: 'Inter, sans-serif',
-              marginBottom: '0.5rem'
-            }}>
-              Browse Help Articles
-            </h3>
-            <p style={{
-              fontSize: '1rem',
-              color: odooColors.neutralGray,
-              fontFamily: 'Inter, sans-serif',
-              lineHeight: '1.5'
-            }}>
-              Explore how-to's and learn best practices from our knowledge base.
-            </p>
-          </div>
+
         </div>
       </div>
 
@@ -330,7 +281,7 @@ const UserHomePage = () => {
                 fontFamily: 'Inter, sans-serif'
               }}>
                 <i className="bi bi-ticket-detailed me-2" style={{ color: odooColors.secondaryTeal }}></i>
-                Total Tickets
+                Total Requests
               </p>
             </div>
 
@@ -351,7 +302,7 @@ const UserHomePage = () => {
                 fontFamily: 'Inter, sans-serif'
               }}>
                 <i className="bi bi-hourglass-split me-2" style={{ color: odooColors.primaryPurple }}></i>
-                Open Tickets
+                Open Requests
               </p>
             </div>
 

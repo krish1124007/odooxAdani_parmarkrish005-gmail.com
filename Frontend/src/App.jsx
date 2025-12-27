@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import AppLayout from './components/layout/AppLayout'
+import Navbar from './components/layout/Navbar'
 import LoginPage from './modules/auth/pages/LoginPage'
 import EmailLogin from './modules/auth/pages/EmailLogin'
 import DashboardPage from './modules/dashboard/pages/DashboardPage'
@@ -12,6 +13,15 @@ import MaintenanceCalendarPage from './modules/calendar/pages/MaintenanceCalenda
 import CreateTicket from './modules/tickets/pages/CreateTicket'
 import ShowTickets from './modules/tickets/pages/ShowTickets'
 import UserHomePage from './modules/tickets/pages/UserHomePage'
+import UserProfile from './modules/tickets/pages/UserProfile'
+
+// User Layout wrapper with Navbar
+const UserLayout = ({ children }) => (
+  <>
+    <Navbar />
+    {children}
+  </>
+)
 
 function App() {
   return (
@@ -32,12 +42,11 @@ function App() {
             <Route path="calendar" element={<MaintenanceCalendarPage />} />
           </Route>
 
-          {/* User Routes */}
-          <Route path="/user">
-            <Route index element={<UserHomePage />} />
-            <Route path="tickets" element={<ShowTickets />} />
-            <Route path="create-ticket" element={<CreateTicket />} />
-          </Route>
+          {/* User Routes with Navbar */}
+          <Route path="/user" element={<UserLayout><UserHomePage /></UserLayout>} />
+          <Route path="/user/tickets" element={<UserLayout><ShowTickets /></UserLayout>} />
+          <Route path="/user/create-ticket" element={<UserLayout><CreateTicket /></UserLayout>} />
+          <Route path="/user/profile" element={<UserLayout><UserProfile /></UserLayout>} />
         </Routes>
       </Router>
     </ThemeProvider>

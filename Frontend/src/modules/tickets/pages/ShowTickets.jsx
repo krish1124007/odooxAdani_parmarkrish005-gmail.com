@@ -36,8 +36,10 @@ const ShowTickets = () => {
     // Apply search filter
     if (searchQuery.trim()) {
       filtered = filtered.filter(ticket =>
-        ticket.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        ticket.description.toLowerCase().includes(searchQuery.toLowerCase())
+        (ticket.name && ticket.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (ticket.equipment && ticket.equipment.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (ticket.description && ticket.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (ticket.serialNo && ticket.serialNo.toLowerCase().includes(searchQuery.toLowerCase()))
       )
     }
 
@@ -49,14 +51,16 @@ const ShowTickets = () => {
     setFilteredTickets(filtered)
   }, [tickets, searchQuery, statusFilter])
 
-  const getPriorityColor = (priority) => {
+  const getPriorityColor = (maintenanceType) => {
     const colors = {
+      'Preventive': odooColors.readyGreen,
+      'Corrective': odooColors.gold,
       'low': odooColors.readyGreen,
       'medium': odooColors.gold,
       'high': '#f97316',
       'critical': odooColors.error
     }
-    return colors[priority] || odooColors.neutralGray
+    return colors[maintenanceType] || odooColors.neutralGray
   }
 
   const getStatusColor = (status) => {
@@ -276,7 +280,7 @@ const ShowTickets = () => {
                   borderRadius: '12px',
                   padding: '1.5rem',
                   marginBottom: '1rem',
-                  borderLeft: `5px solid ${getPriorityColor(ticket.priority)}`,
+                  borderLeft: `5px solid ${getPriorityColor(ticket.maintenanceType)}`,
                   boxShadow: isDark ? 'none' : '0 2px 4px rgba(0, 0, 0, 0.05)',
                   border: isDark ? `1px solid ${odooColors.neutralGray}20` : `1px solid #e2e8f0`,
                   borderLeftWidth: '5px',
@@ -296,7 +300,7 @@ const ShowTickets = () => {
                   {/* Left Content */}
                   <div>
                     {/* Badges */}
-                    <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
+                    <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
                       <span style={{
                         backgroundColor: getStatusColor(ticket.status),
                         color: odooColors.white,
@@ -309,7 +313,7 @@ const ShowTickets = () => {
                         {ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1)}
                       </span>
                       <span style={{
-                        backgroundColor: getPriorityColor(ticket.priority),
+                        backgroundColor: getPriorityColor(ticket.maintenanceType),
                         color: odooColors.white,
                         padding: '0.35rem 0.75rem',
                         borderRadius: '20px',
@@ -317,20 +321,31 @@ const ShowTickets = () => {
                         fontWeight: '600',
                         fontFamily: 'Inter, sans-serif'
                       }}>
-                        {ticket.priority.charAt(0).toUpperCase() + ticket.priority.slice(1)} Priority
+                        {ticket.maintenanceType}
+                      </span>
+                      <span style={{
+                        backgroundColor: odooColors.primaryPurple + '40',
+                        color: odooColors.primaryPurple,
+                        padding: '0.35rem 0.75rem',
+                        borderRadius: '20px',
+                        fontSize: '0.85rem',
+                        fontWeight: '600',
+                        fontFamily: 'Inter, sans-serif'
+                      }}>
+                        {ticket.category}
                       </span>
                     </div>
 
-                    {/* Title */}
+                    {/* Equipment and Serial */}
                     <h4 style={{
                       fontSize: '1.1rem',
                       fontWeight: '700',
                       color: isDark ? '#f1f5f9' : '#1e293b',
                       fontFamily: 'Inter, sans-serif',
-                      marginBottom: '0.75rem',
                       margin: '0 0 0.75rem 0'
                     }}>
-                      {ticket.title}
+                      <i className="bi bi-tools" style={{ marginRight: '0.5rem', color: odooColors.secondaryTeal }}></i>
+                      {ticket.equipment} {ticket.serialNo && `(SN: ${ticket.serialNo})`}
                     </h4>
 
                     {/* Description Preview */}
@@ -338,7 +353,6 @@ const ShowTickets = () => {
                       fontSize: '0.95rem',
                       color: odooColors.neutralGray,
                       fontFamily: 'Inter, sans-serif',
-                      marginBottom: '0.75rem',
                       margin: '0 0 0.75rem 0',
                       lineHeight: '1.5'
                     }}>
@@ -346,24 +360,64 @@ const ShowTickets = () => {
                       {ticket.description.length > 150 ? '...' : ''}
                     </p>
 
+                    {/* Ticket Details Grid */}
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      gap: '1rem',
+                      marginTop: '1rem',
+                      paddingTop: '1rem',
+                      borderTop: `1px solid ${isDark ? odooColors.neutralGray + '20' : '#e2e8f0'}`
+                    }}>
+                      <div>
+                        <p style={{
+                          fontSize: '0.85rem',
+                          color: odooColors.neutralGray,
+                          fontFamily: 'Inter, sans-serif',
+                          margin: '0 0 0.25rem 0'
+                        }}>Technician</p>
+                        <p style={{
+                          fontSize: '0.95rem',
+                          fontWeight: '600',
+                          color: isDark ? '#f1f5f9' : '#1e293b',
+                          fontFamily: 'Inter, sans-serif',
+                          margin: 0
+                        }}>
+                          {ticket.technician}
+                        </p>
+                      </div>
+                      <div>
+                        <p style={{
+                          fontSize: '0.85rem',
+                          color: odooColors.neutralGray,
+                          fontFamily: 'Inter, sans-serif',
+                          margin: '0 0 0.25rem 0'
+                        }}>Team</p>
+                        <p style={{
+                          fontSize: '0.95rem',
+                          fontWeight: '600',
+                          color: isDark ? '#f1f5f9' : '#1e293b',
+                          fontFamily: 'Inter, sans-serif',
+                          margin: 0
+                        }}>
+                          {ticket.team}
+                        </p>
+                      </div>
+                    </div>
+
                     {/* Meta Info */}
                     <div style={{
                       display: 'flex',
                       gap: '1.5rem',
                       fontSize: '0.9rem',
                       color: odooColors.neutralGray,
-                      fontFamily: 'Inter, sans-serif'
+                      fontFamily: 'Inter, sans-serif',
+                      marginTop: '1rem'
                     }}>
                       <span>
-                        <i className="bi bi-tag me-1" style={{ color: odooColors.gold }}></i>
-                        {ticket.category.charAt(0).toUpperCase() + ticket.category.slice(1)}
+                        <i className="bi bi-person me-1" style={{ color: odooColors.readyGreen }}></i>
+                        {ticket.name}
                       </span>
-                      {ticket.assignedTo && (
-                        <span>
-                          <i className="bi bi-person me-1" style={{ color: odooColors.readyGreen }}></i>
-                          {ticket.assignedTo}
-                        </span>
-                      )}
                       <span>
                         <i className="bi bi-calendar me-1" style={{ color: odooColors.secondaryTeal }}></i>
                         {new Date(ticket.createdAt).toLocaleDateString('en-US', {
