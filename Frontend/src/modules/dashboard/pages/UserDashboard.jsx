@@ -178,7 +178,13 @@ const UserDashboard = () => {
                                 {recentRequests.map((request) => (
                                     <tr key={request._id || request.id}>
                                         <td>
-                                            <div className="fw-bold">{request.equipment_id?.name || request.equipment || 'General Request'}</div>
+                                            <div className="fw-bold">
+                                                {(request.equipment && request.equipment.name)
+                                                    ? request.equipment.name
+                                                    : (request.equipment_id && request.equipment_id.name)
+                                                        ? request.equipment_id.name
+                                                        : 'General Request'}
+                                            </div>
                                             <small className="text-muted">{request.description?.substring(0, 30)}...</small>
                                         </td>
                                         <td>{request.department}</td>

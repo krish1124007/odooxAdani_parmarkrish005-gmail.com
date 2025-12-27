@@ -20,8 +20,8 @@ const MaintenanceTeamSchema = new mongoose.Schema<IMaintenanceTeam>({
         default: true,
     }
 },
-{
-    timestamps: true,
-})
+    {
+        timestamps: true,
+    })
 
-export const MaintenanceTeamModel = mongoose.model<IMaintenanceTeam>("MaintenanceTeamModel", MaintenanceTeamSchema);
+export const MaintenanceTeamModel = mongoose.model<IMaintenanceTeam>("MaintenanceTeam", MaintenanceTeamSchema);

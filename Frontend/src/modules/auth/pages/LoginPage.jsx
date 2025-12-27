@@ -179,13 +179,7 @@ const Login = () => {
             </div>
           </form>
 
-          <div className="mt-4 p-3 bg-light rounded">
-            <small className="text-muted">
-              <strong>Demo Credentials:</strong><br />
-              Email: admin@admin.com<br />
-              Password: admin123
-            </small>
-          </div>
+         
         </div>
       </div>
     </div>

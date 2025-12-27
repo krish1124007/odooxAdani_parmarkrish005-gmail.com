@@ -12,6 +12,10 @@ import EquipmentListPage from './modules/equipment/pages/EquipmentListPage'
 import RequestListPage from './modules/requests/pages/RequestListPage'
 import RequestKanbanPage from './modules/requests/pages/RequestKanbanPage'
 import TeamsListPage from './modules/teams/pages/TeamsListPage'
+import CreateRequestPage from './modules/requests/pages/CreateRequestPage'
+import UserRequestsPage from './modules/requests/pages/UserRequestsPage'
+import TechnicianTasksPage from './modules/requests/pages/TechnicianTasksPage'
+import FeedbackPage from './modules/requests/pages/FeedbackPage'
 import MaintenanceCalendarPage from './modules/calendar/pages/MaintenanceCalendarPage'
 
 function App() {
@@ -45,7 +49,9 @@ function App() {
               </ProtectedRoute>
             }>
               <Route index element={<UserDashboard />} />
-              {/* Add other user routes here later */}
+              <Route path="create-request" element={<CreateRequestPage />} />
+              <Route path="requests" element={<UserRequestsPage />} />
+              <Route path="feedback" element={<FeedbackPage />} />
               <Route path="*" element={<UserDashboard />} />
             </Route>
 
@@ -56,7 +62,7 @@ function App() {
               </ProtectedRoute>
             }>
               <Route index element={<TechnicianDashboard />} />
-              {/* Add other technician routes here later */}
+              <Route path="tasks" element={<TechnicianTasksPage />} />
               <Route path="*" element={<TechnicianDashboard />} />
             </Route>
           </Routes>

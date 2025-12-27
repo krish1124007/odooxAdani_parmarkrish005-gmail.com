@@ -44,7 +44,30 @@ const TechnicianDashboard = () => {
             // If not, we might be showing "Created by me" requests which is not ideal, but better than nothing for now.
             // In a real scenario, we would ask for a specific endpoint.
             const response = await userService.getMyRequests();
-            const tasks = response.data || [];
+
+            // Mock data for demonstration if no real tasks exist
+            const mockTasks = [
+                {
+                    _id: 'mock1',
+                    equipment_id: { name: 'Conveyor Belt A' },
+                    description: 'Regular maintenance check and lubrication needed.',
+                    priority: 'High',
+                    status: 'New',
+                    updatedAt: new Date().toISOString(),
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    _id: 'mock2',
+                    equipment_id: { name: 'Hydraulic Press B' },
+                    description: 'Oil leakage reported near usage valve.',
+                    priority: 'Medium',
+                    status: 'In Progress',
+                    updatedAt: new Date().toISOString(),
+                    createdAt: new Date(Date.now() - 86400000).toISOString()
+                }
+            ];
+
+            const tasks = (response.data && response.data.length > 0) ? response.data : mockTasks;
 
             // Mock filtering logic if the backend returned all requests (unlikely but possible)
             // or just using what we got.

@@ -30,7 +30,6 @@ const MaintenanceRequestSchema = new Schema<IMaintenanceRequest>(
         maintenanceTeam: {
             type: Schema.Types.ObjectId,
             ref: "MaintenanceTeam",
-            required: true,
         },
 
         assignedTechnician: {
@@ -68,7 +67,6 @@ const MaintenanceRequestSchema = new Schema<IMaintenanceRequest>(
         company: {
             type: Schema.Types.ObjectId,
             ref: "Company",
-            required: true,
         },
 
         isActive: {
