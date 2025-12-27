@@ -1,37 +1,66 @@
+import { Link, useLocation } from 'react-router-dom'
+import { useState } from 'react'
+
 const Navbar = () => {
+  const location = useLocation()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const menuItems = [
+    { path: '/dashboard', label: 'Dashboard' },
+    { path: '/dashboard/calendar', label: 'Maintenance Calendar' },
+    { path: '/dashboard/equipment', label: 'Equipment' },
+    { path: '/dashboard/requests', label: 'Reporting' },
+    { path: '/dashboard/teams', label: 'Teams' },
+  ]
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
-      <div className="container-fluid">
-        <div className="d-flex align-items-center flex-grow-1">
-          <button className="btn btn-link text-dark">
-            <i className="bi bi-list fs-4"></i>
-          </button>
-          
-          <form className="d-flex ms-3 flex-grow-1" style={{ maxWidth: '500px' }}>
-            <input
-              className="form-control"
-              type="search"
-              placeholder="Search equipment, requests..."
-              aria-label="Search"
-            />
-          </form>
+    <nav className="navbar-top">
+      <div className="navbar-container">
+        {/* Brand/Logo - Left Side */}
+        <div className="navbar-brand">
+          <Link to="/" className="brand-link">
+            <svg className="odoo-logo" viewBox="0 0 142 40" xmlns="http://www.w3.org/2000/svg">
+              <text x="10" y="30" fontFamily="Arial, sans-serif" fontSize="28" fontWeight="300" fill="#714B67">odoo</text>
+            </svg>
+          </Link>
         </div>
 
-        <div className="d-flex align-items-center gap-3">
-          <button className="btn btn-link text-dark position-relative">
-            <i className="bi bi-bell fs-5"></i>
-            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-              3
-            </span>
+        {/* Navigation Links - Center */}
+        <div className={`navbar-menu ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+          <ul className="nav-links">
+            {menuItems.map((item) => (
+              <li key={item.path}>
+                <Link
+                  to={item.path}
+                  className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span>{item.label}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Right Side Actions */}
+        <div className="navbar-actions">
+          {/* User Icon */}
+          <button className="navbar-icon-btn">
+            <i className="bi bi-person-circle"></i>
           </button>
-          
-          <button className="btn btn-link text-dark">
-            <i className="bi bi-gear fs-5"></i>
+
+          {/* Try it free Button */}
+          <Link to="/signup" className="btn-try-free">
+            Try it free
+          </Link>
+
+          {/* Mobile Menu Toggle */}
+          <button 
+            className="mobile-menu-toggle"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            <i className={`bi ${mobileMenuOpen ? 'bi-x' : 'bi-list'}`}></i>
           </button>
-          
-          <div className="avatar">
-            AD
-          </div>
         </div>
       </div>
     </nav>

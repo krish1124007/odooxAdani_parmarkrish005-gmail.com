@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../../context/ThemeContext';
+import authService from '../../../services/authService';
 import '../../../styles/LoginPage.css';
 
 const Login = () => {
@@ -8,7 +9,8 @@ const Login = () => {
   const { colors, isDark, toggleTheme } = useTheme();
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
+    role: 'user'
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,23 +48,31 @@ const Login = () => {
     setErrors({});
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Call backend API - expects { email, password }
+      const response = await authService.login({
+        email: formData.email,
+        password: formData.password
+      });
       
-      if (formData.email === 'admin@admin.com' && formData.password === 'admin123') {
-        const mockUserData = {
-          id: 1,
-          email: formData.email,
-          name: 'Admin User',
-          role: 'admin'
-        };
-        localStorage.setItem('authToken', 'mock-jwt-token-' + Date.now());
-        localStorage.setItem('userData', JSON.stringify(mockUserData));
-        navigate('/dashboard');
+      // Backend returns: { success, message, data: { ...user, accessToken } }
+      if (response.success) {
+        // Store role in localStorage
+        localStorage.setItem('userRole', formData.role);
+        
+        // Route based on role
+        if (formData.role === 'admin') {
+          navigate('/dashboard');
+        } else {
+          navigate('/user');
+        }
       } else {
-        throw new Error('Invalid email or password');
+        throw new Error(response.message || 'Login failed');
       }
     } catch (error) {
-      setErrors({ submit: error.message || 'Login failed. Please try again.' });
+      console.error('Login error:', error);
+      setErrors({ 
+        submit: error.message || 'Login failed. Please check your credentials.' 
+      });
     } finally {
       setIsLoading(false);
     }
@@ -95,6 +105,22 @@ const Login = () => {
           </div>
 
           <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="role" className="form-label fw-semibold">Select Role</label>
+              <select
+                className="form-select"
+                id="role"
+                name="role"
+                value={formData.role}
+                onChange={handleInputChange}
+                disabled={isLoading}
+                style={{ padding: '0.75rem', fontSize: '1rem' }}
+              >
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+
             <div className="mb-3">
               <label htmlFor="email" className="form-label fw-semibold">Email</label>
               <input
