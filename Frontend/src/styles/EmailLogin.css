@@ -1,0 +1,54 @@
+﻿/* Sign Up Page - Bootstrap Enhanced Styles */
+
+/* Prevent scrolling on main container */
+.vh-100 {
+  overflow: hidden !important;
+}
+
+/* Custom scrollbar for card body */
+.card-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.card-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.card-body::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.card-body::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Odoo logo */
+.odoo-logo {
+  font-weight: 700;
+  letter-spacing: -2px;
+}
+
+/* Input focus with Odoo color */
+.form-control:focus {
+  border-color: #714B67;
+  box-shadow: 0 0 0 0.25rem rgba(113, 75, 103, 0.25);
+}
+
+/* Button hover effect */
+.btn-lg:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .card-body {
+    padding: 1.5rem !important;
+  }
+  
+  .odoo-logo {
+    font-size: 2rem !important;
+  }
+}

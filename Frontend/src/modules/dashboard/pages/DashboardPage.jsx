@@ -1,6 +1,14 @@
 import PageContainer from '../../../components/layout/PageContainer'
+import { useNavigate } from 'react-router-dom'
 
 const DashboardPage = () => {
+  const navigate = useNavigate()
+  
+  const handleLogout = () => {
+    localStorage.removeItem('authToken')
+    localStorage.removeItem('userData')
+    navigate('/login')
+  }
   const stats = [
     { label: 'Total Equipment', value: '142', icon: 'bi-gear-fill', color: 'primary' },
     { label: 'Active Requests', value: '23', icon: 'bi-wrench', color: 'warning' },
@@ -13,6 +21,15 @@ const DashboardPage = () => {
       title="Dashboard"
       subtitle="Welcome to GearGuard Maintenance System"
     >
+      <div className="mb-3">
+        <button 
+          onClick={handleLogout} 
+          className="btn btn-danger"
+          style={{ backgroundColor: '#dc3545', border: 'none' }}
+        >
+          <i className="bi bi-box-arrow-right me-2"></i>Logout
+        </button>
+      </div>
       <div className="row g-4 mb-4">
         {stats.map((stat, index) => (
           <div key={index} className="col-md-6 col-lg-3">
