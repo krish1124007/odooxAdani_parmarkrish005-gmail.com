@@ -21,6 +21,7 @@ router.route("/login").post(login)
 router.route("/suggestion").get(authMiddleware, suggestion)
 router.route("/create-request").post(authMiddleware, createRequest)
 router.route("/read-request").get(authMiddleware, readRequest)
+router.route("/read-request/:id").get(authMiddleware, readRequest)
 
 // Comment routes
 router.route("/:requestId/add-comment").post(authMiddleware, addComment);
